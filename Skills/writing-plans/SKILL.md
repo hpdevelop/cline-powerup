@@ -1,116 +1,88 @@
 ---
 name: writing-plans
-description: Use when you have a spec or requirements for a multi-step task, before touching code
+description: Use after an approved design to produce a detailed, executable implementation plan before coding.
 ---
 
 # Writing Plans
 
-## Overview
+## Purpose
 
-Write comprehensive implementation plans assuming the engineer has zero context for our codebase and questionable taste. Document everything they need to know: which files to touch for each task, code, testing, docs they might need to check, how to test it. Give them the whole plan as bite-sized tasks. DRY. YAGNI. TDD. Frequent commits.
+Create an execution-ready implementation plan from an approved design.
 
-Assume they are a skilled developer, but know almost nothing about our toolset or problem domain. Assume they don't know good test design very well.
+Why: detailed planning keeps implementation deterministic and verifiable.
 
-**Announce at start:** "I'm using the writing-plans skill to create the implementation plan."
+## Required Input
 
-**Context:** This should be run in a dedicated worktree (created by brainstorming skill).
+- Approved design document
+- Current repository structure
+- Constraints and success criteria
 
-**Save plans to:** `docs/plans/YYYY-MM-DD-<feature-name>.md`
+## Required Output
 
-## Bite-Sized Task Granularity
+- Plan file at `docs/plans/YYYY-MM-DD-<feature-name>.md`
+- Ordered tasks with explicit verification steps
+- Execution handoff choice
 
-**Each step is one action (2-5 minutes):**
-- "Write the failing test" - step
-- "Run it to make sure it fails" - step
-- "Implement the minimal code to make the test pass" - step
-- "Run the tests and make sure they pass" - step
-- "Commit" - step
+## Hard Gates
 
-## Plan Document Header
+- Do not write implementation code in this skill.
+- Do not skip testing and verification steps in the plan.
 
-**Every plan MUST start with this header:**
+## Plan Structure
 
-```markdown
-# [Feature Name] Implementation Plan
+Every plan must include:
+1. Goal
+2. Architecture summary
+3. Task list
+4. File-level changes
+5. Test steps
+6. Verification evidence expectations
+7. Risk notes
 
-> **For Claude:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task.
+## Task Granularity Rule
 
-**Goal:** [One sentence describing what this builds]
+Each task should be small and concrete (usually 2-5 minutes):
+- one coding action
+- one validation action
+- one commit action when meaningful
 
-**Architecture:** [2-3 sentences about approach]
+## Task Template
 
-**Tech Stack:** [Key technologies/libraries]
+Use this template for each task:
 
----
-```
+- Task name
+- Files to create/modify/test
+- Step-by-step actions
+- Commands to run
+- Expected output
+- Commit suggestion
 
-## Task Structure
+## Quality Rules
 
-````markdown
-### Task N: [Component Name]
-
-**Files:**
-- Create: `exact/path/to/file.py`
-- Modify: `exact/path/to/existing.py:123-145`
-- Test: `tests/exact/path/to/test.py`
-
-**Step 1: Write the failing test**
-
-```python
-def test_specific_behavior():
-    result = function(input)
-    assert result == expected
-```
-
-**Step 2: Run test to verify it fails**
-
-Run: `pytest tests/path/test.py::test_name -v`
-Expected: FAIL with "function not defined"
-
-**Step 3: Write minimal implementation**
-
-```python
-def function(input):
-    return expected
-```
-
-**Step 4: Run test to verify it passes**
-
-Run: `pytest tests/path/test.py::test_name -v`
-Expected: PASS
-
-**Step 5: Commit**
-
-```bash
-git add tests/path/test.py src/path/file.py
-git commit -m "feat: add specific feature"
-```
-````
-
-## Remember
-- Exact file paths always
-- Complete code in plan (not "add validation")
-- Exact commands with expected output
-- Reference relevant skills with @ syntax
-- DRY, YAGNI, TDD, frequent commits
+- Use exact file paths.
+- Use explicit commands.
+- State expected pass/fail outcomes.
+- Keep scope minimal (DRY and YAGNI).
 
 ## Execution Handoff
 
-After saving the plan, offer execution choice:
+After saving the plan, offer:
+1. Same-session execution
+2. Separate-session execution
 
-**"Plan complete and saved to `docs/plans/<filename>.md`. Two execution options:**
+For both options, require verification before completion claims.
 
-**1. Subagent-Driven (this session)** - I dispatch fresh subagent per task, review between tasks, fast iteration
+## Guarded Fallback
 
-**2. Parallel Session (separate)** - Open new session with executing-plans, batch execution with checkpoints
+If planning cannot follow the normal path, record:
+- Trigger
+- Risk
+- Impact
+- Compensation
+- Recovery
 
-**Which approach?"**
+## Small-Model Guidance
 
-**If Subagent-Driven chosen:**
-- **REQUIRED SUB-SKILL:** Use superpowers:subagent-driven-development
-- Stay in this session
-- Fresh subagent per task + code review
-
-**If Parallel Session chosen:**
-- Guide them to open new session in worktree
-- **REQUIRED SUB-SKILL:** New session uses superpowers:executing-plans
+- Prefer short imperative lines.
+- Avoid long narrative blocks.
+- Repeat critical gate conditions in plain words.
