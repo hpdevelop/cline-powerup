@@ -1,84 +1,62 @@
 ---
 name: executing-plans
-description: Use when you have a written implementation plan to execute in a separate session with review checkpoints
+description: Use when an approved implementation plan exists and you need deterministic step-by-step execution.
 ---
 
 # Executing Plans
 
-## Overview
+## Purpose
 
-Load plan, review critically, execute tasks in batches, report for review between batches.
+Execute an approved plan in strict step order.
 
-**Core principle:** Batch execution with checkpoints for architect review.
+Why: deterministic execution prevents skipped gates and scope drift.
 
-**Announce at start:** "I'm using the executing-plans skill to implement this plan."
+## Required Input
 
-## The Process
+- Approved plan file
+- Current repository state
+- Verification commands
 
-### Step 1: Load and Review Plan
-1. Read plan file
-2. Review critically - identify any questions or concerns about the plan
-3. If concerns: Raise them with your human partner before starting
-4. If no concerns: Create TodoWrite and proceed
+## Required Output
 
-### Step 2: Execute Batch
-**Default: First 3 tasks**
+- Completed step log
+- Verification evidence per step
+- Final completion report
 
-For each task:
-1. Mark as in_progress
-2. Follow each step exactly (plan has bite-sized steps)
-3. Run verifications as specified
-4. Mark as completed
+## Workflow
 
-### Step 3: Report
-When batch complete:
-- Show what was implemented
-- Show verification output
-- Say: "Ready for feedback."
+1. Read the full plan.
+2. Execute one task at a time.
+3. Run required verification after each task.
+4. Record evidence before moving forward.
+5. Stop and fix when verification fails.
 
-### Step 4: Continue
-Based on feedback:
-- Apply changes if needed
-- Execute next batch
-- Repeat until complete
+## Rules
 
-### Step 5: Complete Development
+- No out-of-order execution unless plan is revised.
+- No silent task merging.
+- Keep commits scoped to current task.
 
-After all tasks complete and verified:
-- Announce: "I'm using the finishing-a-development-branch skill to complete this work."
-- **REQUIRED SUB-SKILL:** Use superpowers:finishing-a-development-branch
-- Follow that skill to verify tests, present options, execute choice
+## Review Integration
 
-## When to Stop and Ask for Help
+After each major step:
+- run spec-alignment check
+- run quality check
+- update risk notes
 
-**STOP executing immediately when:**
-- Hit a blocker mid-batch (missing dependency, test fails, instruction unclear)
-- Plan has critical gaps preventing starting
-- You don't understand an instruction
-- Verification fails repeatedly
+## Guarded Fallback
 
-**Ask for clarification rather than guessing.**
+If a planned step cannot run as written, record:
+- Trigger
+- Risk
+- Impact
+- Compensation
+- Recovery
 
-## When to Revisit Earlier Steps
+Then continue with explicit revised steps.
 
-**Return to Review (Step 1) when:**
-- Partner updates the plan based on your feedback
-- Fundamental approach needs rethinking
+## Small-Model Guidance
 
-**Don't force through blockers** - stop and ask.
-
-## Remember
-- Review plan critically first
-- Follow plan steps exactly
-- Don't skip verifications
-- Reference skills when plan says to
-- Between batches: just report and wait
-- Stop when blocked, don't guess
-- Never start implementation on main/master branch without explicit user consent
-
-## Integration
-
-**Required workflow skills:**
-- **superpowers:using-git-worktrees** - REQUIRED: Set up isolated workspace before starting
-- **superpowers:writing-plans** - Creates the plan this skill executes
-- **superpowers:finishing-a-development-branch** - Complete development after all tasks
+- Keep one command block per step.
+- Always state expected output.
+- Use clear pass/fail language.
