@@ -28,12 +28,13 @@ Do not use this skill for pure ideation tasks with no runnable output.
 
 ## Non-Negotiable Rules
 
-1. Run `uvx showboat --help` at least once per task before building the demo.
-2. Create the demo with `showboat init`; do not create it manually.
-3. Record each validation step with `showboat note` + `showboat exec`.
-4. If a step is wrong, use `showboat pop` and re-run; never hand-edit command/output blocks.
-5. Finish with both `showboat verify` and `showboat extract`.
-6. Do not depend on Claude/Codex-only tool names; use Cline command execution.
+1. Ensure Showboat is installed globally with `uv tool install showboat` (one-time per environment).
+2. Run `showboat --help` at least once per task before building the demo.
+3. Create the demo with `showboat init`; do not create it manually.
+4. Record each validation step with `showboat note` + `showboat exec`.
+5. If a step is wrong, use `showboat pop` and re-run; never hand-edit command/output blocks.
+6. Finish with both `showboat verify` and `showboat extract`.
+7. Do not depend on Claude/Codex-only tool names; use Cline command execution.
 
 ## Standard Procedure
 
@@ -45,31 +46,37 @@ TASK_SLUG="<kebab-case-task>"
 DEMO_FILE="docs/demos/${TASK_SLUG}-demo.md"
 ```
 
-2. Initialize demo.
+2. Install and check tool.
 
 ```bash
-uvx showboat --help
-uvx showboat init "$DEMO_FILE" "${TASK_SLUG} evidence demo"
+uv tool install showboat
+showboat --help
 ```
 
-3. For each verification command, add note and execute.
+3. Initialize demo.
 
 ```bash
-uvx showboat note "$DEMO_FILE" "Run: <what this command proves>"
-uvx showboat exec "$DEMO_FILE" bash "<command>"
+showboat init "$DEMO_FILE" "${TASK_SLUG} evidence demo"
 ```
 
-4. If the latest entry is invalid, pop then redo.
+4. For each verification command, add note and execute.
 
 ```bash
-uvx showboat pop "$DEMO_FILE"
+showboat note "$DEMO_FILE" "Run: <what this command proves>"
+showboat exec "$DEMO_FILE" bash "<command>"
 ```
 
-5. Final integrity checks.
+5. If the latest entry is invalid, pop then redo.
 
 ```bash
-uvx showboat verify "$DEMO_FILE"
-uvx showboat extract "$DEMO_FILE"
+showboat pop "$DEMO_FILE"
+```
+
+6. Final integrity checks.
+
+```bash
+showboat verify "$DEMO_FILE"
+showboat extract "$DEMO_FILE"
 ```
 
 ## Failure Handling

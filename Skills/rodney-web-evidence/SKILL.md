@@ -24,7 +24,7 @@ If the task has no web UI, skip Rodney and use Showboat-only evidence.
 ## Preconditions
 
 1. A Showboat demo file already exists: `docs/demos/<task>-demo.md`.
-2. `uvx` is available.
+2. Global tools are installed with `uv tool install showboat` and `uv tool install rodney`.
 3. The target page URL and key selectors/assertions are known.
 
 ## Required Flow
@@ -32,43 +32,44 @@ If the task has no web UI, skip Rodney and use Showboat-only evidence.
 1. Read tool capabilities.
 
 ```bash
-uvx rodney --help
+uv tool install rodney
+rodney --help
 ```
 
 2. Start a browser session (headless by default).
 
 ```bash
-uvx rodney start
+rodney start
 ```
 
 3. Open page and wait for readiness.
 
 ```bash
-uvx rodney open "<url>"
-uvx rodney waitload
-uvx rodney waitidle
+rodney open "<url>"
+rodney waitload
+rodney waitidle
 ```
 
 4. Run verifiable checks.
 
 ```bash
-uvx rodney exists "<selector>"
-uvx rodney visible "<selector>"
-uvx rodney assert "document.title.includes('<keyword>')"
+rodney exists "<selector>"
+rodney visible "<selector>"
+rodney assert "document.title.includes('<keyword>')"
 ```
 
 5. Capture screenshot and add it to the same Showboat demo.
 
 ```bash
 IMG_FILE="docs/demos/<task>-web.png"
-uvx rodney screenshot "$IMG_FILE"
-uvx showboat image "docs/demos/<task>-demo.md" "$IMG_FILE"
+rodney screenshot "$IMG_FILE"
+showboat image "docs/demos/<task>-demo.md" "$IMG_FILE"
 ```
 
 6. Stop browser session.
 
 ```bash
-uvx rodney stop
+rodney stop
 ```
 
 ## Showboat Integration Pattern
@@ -76,8 +77,8 @@ uvx rodney stop
 For each key Rodney command, write a short note and capture output via Showboat:
 
 ```bash
-uvx showboat note "$DEMO_FILE" "Web check: <purpose>"
-uvx showboat exec "$DEMO_FILE" bash "uvx rodney <subcommand> ..."
+showboat note "$DEMO_FILE" "Web check: <purpose>"
+showboat exec "$DEMO_FILE" bash "rodney <subcommand> ..."
 ```
 
 ## Failure Handling
