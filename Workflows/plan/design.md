@@ -1,10 +1,10 @@
 ---
-description: Turn a request into an approved design before any implementation begins.
+description: Turn a request into an approved design and execution plan before any implementation begins.
 ---
 
-# /brainstorm — Design Before Implementation
+# /plan/design — Design and Plan
 
-**Hard gate:** Do not write code, modify files, or call any implementation workflow until the user has explicitly approved the design.
+**Hard gate:** Do not write implementation code, modify source files, or call any act workflow until the user has explicitly approved the design.
 
 ## Step 1: Explore context
 
@@ -40,9 +40,33 @@ Revise any section the user pushes back on.
 Write the approved design to `docs/plans/YYYY-MM-DD-<topic>-design.md`.
 Commit the document to git.
 
-## Step 6: Hand off to planning
+## Step 6: Write implementation plan
 
-Run `/write-plan`.
+No implementation code in this step.
+
+Break the approved design into small, concrete tasks. Each task must have:
+- Files to create/modify/test
+- Step-by-step actions
+- Commands to run
+- Expected output
+- Commit suggestion
+
+Every plan must include:
+1. Goal
+2. Architecture summary
+3. Ordered task list
+4. File-level changes
+5. Test steps
+6. Verification evidence expectations
+7. Risk notes
+
+Save the plan to `docs/plans/YYYY-MM-DD-<feature-name>.md`.
+
+## Step 7: Offer execution choice
+
+Ask the user:
+1. Execute in this session — run `/act/execute-plan` now
+2. Execute in a separate session — save and continue later
 
 ## Guarded Fallback
 

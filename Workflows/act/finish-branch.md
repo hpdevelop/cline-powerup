@@ -1,4 +1,4 @@
-# /finish-branch — Complete Development Branch
+# /act/finish-branch — Complete Development Branch
 
 ## When to use
 

@@ -1,4 +1,4 @@
-# /tdd — Test-Driven Development Cycle
+# /act/tdd — Test-Driven Development Cycle
 
 ## When to use
 

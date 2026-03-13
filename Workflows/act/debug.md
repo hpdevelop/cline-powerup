@@ -1,4 +1,4 @@
-# /debug — Systematic Debugging
+# /act/debug — Systematic Debugging
 
 ## When to use
 

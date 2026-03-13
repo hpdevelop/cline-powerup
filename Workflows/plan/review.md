@@ -1,4 +1,4 @@
-# /review — Code Review
+# /plan/review — Code Review
 
 ## When to use
 

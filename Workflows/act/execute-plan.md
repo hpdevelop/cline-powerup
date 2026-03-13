@@ -1,4 +1,4 @@
-# /execute-plan — Run Approved Plan
+# /act/execute-plan — Run Approved Plan
 
 ## When to use
 
