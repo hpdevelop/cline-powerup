@@ -2,6 +2,8 @@
 description: Create or update the project constitution from interactive or provided principle inputs, ensuring all dependent templates stay in sync.
 ---
 
+# /speckit/constitution — Update Project Constitution
+
 ## User Input
 
 ```text
@@ -10,77 +12,99 @@ $ARGUMENTS
 
 You **MUST** consider the user input before proceeding (if not empty).
 
-## Outline
+**Scope**: You are updating `.specify/memory/constitution.md`. This file contains placeholder tokens in square brackets (e.g. `[PROJECT_NAME]`, `[PRINCIPLE_1_NAME]`). Your job is to collect concrete values, fill the template precisely, and propagate any amendments across dependent artifacts.
 
-You are updating the project constitution at `.specify/memory/constitution.md`. This file is a TEMPLATE containing placeholder tokens in square brackets (e.g. `[PROJECT_NAME]`, `[PRINCIPLE_1_NAME]`). Your job is to (a) collect/derive concrete values, (b) fill the template precisely, and (c) propagate any amendments across dependent artifacts.
+If `.specify/memory/constitution.md` does not exist, copy from `.specify/templates/constitution-template.md` first.
 
-**Note**: If `.specify/memory/constitution.md` does not exist yet, it should have been initialized from `.specify/templates/constitution-template.md` during project setup. If it's missing, copy the template first.
+## Step 1: Load existing constitution
 
-Follow this execution flow:
+Read `.specify/memory/constitution.md`. Identify every placeholder token of the form `[ALL_CAPS_IDENTIFIER]`.
 
-1. Load the existing constitution at `.specify/memory/constitution.md`.
-   - Identify every placeholder token of the form `[ALL_CAPS_IDENTIFIER]`.
-   **IMPORTANT**: The user might require less or more principles than the ones used in the template. If a number is specified, respect that - follow the general template. You will update the doc accordingly.
+Note: the user may require fewer or more principles than the template provides — respect any count specified and adjust the document accordingly.
 
-2. Collect/derive values for placeholders:
-   - If user input (conversation) supplies a value, use it.
-   - Otherwise infer from existing repo context (README, docs, prior constitution versions if embedded).
-   - For governance dates: `RATIFICATION_DATE` is the original adoption date (if unknown ask or mark TODO), `LAST_AMENDED_DATE` is today if changes are made, otherwise keep previous.
-   - `CONSTITUTION_VERSION` must increment according to semantic versioning rules:
-     - MAJOR: Backward incompatible governance/principle removals or redefinitions.
-     - MINOR: New principle/section added or materially expanded guidance.
-     - PATCH: Clarifications, wording, typo fixes, non-semantic refinements.
-   - If version bump type ambiguous, propose reasoning before finalizing.
+## Step 2: Collect values for placeholders
 
-3. Draft the updated constitution content:
-   - Replace every placeholder with concrete text (no bracketed tokens left except intentionally retained template slots that the project has chosen not to define yet—explicitly justify any left).
-   - Preserve heading hierarchy and comments can be removed once replaced unless they still add clarifying guidance.
-   - Ensure each Principle section: succinct name line, paragraph (or bullet list) capturing non‑negotiable rules, explicit rationale if not obvious.
-   - Ensure Governance section lists amendment procedure, versioning policy, and compliance review expectations.
+For each placeholder:
+- If user input supplies a value, use it
+- Otherwise infer from repo context (README, docs, prior constitution versions)
 
-4. Consistency propagation checklist (convert prior checklist into active validations):
-   - Read `.specify/templates/plan-template.md` and ensure any "Constitution Check" or rules align with updated principles.
-   - Read `.specify/templates/spec-template.md` for scope/requirements alignment—update if constitution adds/removes mandatory sections or constraints.
-   - Read `.specify/templates/tasks-template.md` and ensure task categorization reflects new or removed principle-driven task types (e.g., observability, versioning, testing discipline).
-   - Read each command file in `.specify/templates/commands/*.md` (including this one) to verify no outdated references (agent-specific names like CLAUDE only) remain when generic guidance is required.
-   - Read any runtime guidance docs (e.g., `README.md`, `docs/quickstart.md`, or agent-specific guidance files if present). Update references to principles changed.
+For governance dates:
+- `RATIFICATION_DATE` — original adoption date (ask or mark TODO if unknown)
+- `LAST_AMENDED_DATE` — today's date if changes are made, otherwise keep previous
 
-5. Produce a Sync Impact Report (prepend as an HTML comment at top of the constitution file after update):
-   - Version change: old → new
-   - List of modified principles (old title → new title if renamed)
-   - Added sections
-   - Removed sections
-   - Templates requiring updates (✅ updated / ⚠ pending) with file paths
-   - Follow-up TODOs if any placeholders intentionally deferred.
+For `CONSTITUTION_VERSION`, increment using semantic versioning:
+- **MAJOR**: Backward-incompatible governance changes, principle removals or redefinitions
+- **MINOR**: New principle or section added, materially expanded guidance
+- **PATCH**: Clarifications, wording, typo fixes, non-semantic refinements
 
-6. Validation before final output:
-   - No remaining unexplained bracket tokens.
-   - Version line matches report.
-   - Dates ISO format YYYY-MM-DD.
-   - Principles are declarative, testable, and free of vague language ("should" → replace with MUST/SHOULD rationale where appropriate).
+If version bump type is ambiguous, propose reasoning before finalizing.
 
-7. Write the completed constitution back to `.specify/memory/constitution.md` (overwrite).
+## Step 3: Draft the updated constitution
 
-8. Output a final summary to the user with:
-   - New version and bump rationale.
-   - Any files flagged for manual follow-up.
-   - Suggested commit message (e.g., `docs: amend constitution to vX.Y.Z (principle additions + governance update)`).
+Replace every placeholder with concrete text — no bracketed tokens should remain (except intentionally deferred slots, which must be explicitly justified).
 
-Formatting & Style Requirements:
+For each Principle section:
+- Succinct name line
+- Paragraph or bullet list of non-negotiable rules
+- Explicit rationale if not obvious
 
-- Use Markdown headings exactly as in the template (do not demote/promote levels).
-- Wrap long rationale lines to keep readability (<100 chars ideally) but do not hard enforce with awkward breaks.
-- Keep a single blank line between sections.
-- Avoid trailing whitespace.
+For the Governance section:
+- Amendment procedure
+- Versioning policy
+- Compliance review expectations
 
-If the user supplies partial updates (e.g., only one principle revision), still perform validation and version decision steps.
+Principles must be declarative and testable. Replace vague language: "should" → MUST or SHOULD with clear rationale. Replace vague adjectives with measurable criteria.
 
-If critical info missing (e.g., ratification date truly unknown), insert `TODO(<FIELD_NAME>): explanation` and include in the Sync Impact Report under deferred items.
+## Step 4: Propagate changes to dependent templates
 
-Do not create a new template; always operate on the existing `.specify/memory/constitution.md` file.
+Read each dependent file and update any references to changed or removed principles:
+
+- `.specify/templates/plan-template.md` — verify "Constitution Check" section aligns with updated principles
+- `.specify/templates/spec-template.md` — verify scope/requirements alignment; update if mandatory sections changed
+- `.specify/templates/tasks-template.md` — verify task categories reflect new or removed principle-driven task types (observability, testing discipline, versioning)
+- `.specify/templates/commands/*.md` — verify no outdated agent-specific references remain
+- `README.md` and any `docs/` guidance files — update principle references
+
+## Step 5: Produce Sync Impact Report
+
+Prepend an HTML comment at the top of the updated constitution file:
+
+```html
+<!--
+SYNC IMPACT REPORT — vOLD → vNEW (YYYY-MM-DD)
+Modified principles: [old title → new title]
+Added sections: [list]
+Removed sections: [list]
+Templates updated:
+  ✅ .specify/templates/plan-template.md
+  ⚠ .specify/templates/spec-template.md (pending manual review)
+Deferred TODOs: [list any intentionally deferred placeholders]
+-->
+```
+
+## Step 6: Validate before writing
+
+Check:
+- No unexplained bracket tokens remain
+- Version line matches the Sync Impact Report
+- Dates are in ISO format `YYYY-MM-DD`
+- Principles are declarative, testable, and free of vague language
+- If critical info is missing (e.g., ratification date truly unknown), insert `TODO(<FIELD_NAME>): explanation`
+
+## Step 7: Write the completed constitution
+
+Overwrite `.specify/memory/constitution.md` with the updated content.
+
+## Step 8: Report completion
+
+Output:
+- New version number and bump rationale
+- Summary of principle changes
+- Files updated and any flagged for manual follow-up
+- Suggested commit message: `docs: amend constitution to vX.Y.Z (<summary of changes>)`
 
 ## Next Steps
 
 After completing this workflow, present this option to the user:
 
-1. **`/speckit.specify`** — Start a feature specification guided by the updated constitution
+1. **`/speckit/specify`** — Start a feature specification guided by the updated constitution

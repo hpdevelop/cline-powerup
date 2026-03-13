@@ -1,33 +1,37 @@
+---
+description: Close development work with explicit integration options and a residual risk statement.
+---
+
 # /act/finish-branch — Complete Development Branch
 
-## When to use
-
-When implementation and verification are complete.
-
-## Pre-Completion Gates
-
-All must be true before proceeding:
+**Pre-completion gates — all must be true before proceeding:**
 - [ ] Planned scope is complete
 - [ ] Verification evidence exists
 - [ ] Blocker findings are resolved or explicitly deferred
 
-## Steps
+## Step 1: Summarize changes
 
-1. Summarize what changed.
-2. Summarize verification and review status.
-3. List residual risks.
-4. Present completion options:
-   1. Merge now
-   2. Open PR
-   3. Keep branch for more work
-   4. Discard branch
-5. Execute selected option safely.
+Describe what changed and why.
 
-## Output
+## Step 2: Summarize verification and review status
 
-- Branch completion report
-- Residual risk statement
-- Executed next step
+State the current state of tests, evidence, and review findings.
+
+## Step 3: List residual risks
+
+Document any known risks that remain after completion.
+
+## Step 4: Present completion options
+
+Present these options to the user and wait for their choice:
+1. Merge now
+2. Open PR
+3. Keep branch for more work
+4. Discard branch
+
+## Step 5: Execute selected option
+
+Carry out the chosen option safely.
 
 ## Guarded Fallback
 

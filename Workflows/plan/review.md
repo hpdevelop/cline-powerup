@@ -1,30 +1,33 @@
+---
+description: Review implementation against plan requirements before final completion.
+---
+
 # /plan/review — Code Review
 
-## When to use
+## Step 1: Compare against plan
 
-After implementation checkpoints, before final completion.
+Compare code changes against the approved plan requirements.
+Check for behavior risks and regression risks.
 
-## Steps
+## Step 2: Check test coverage
 
-1. Compare code against plan requirements.
-2. Inspect for behavior risks and regression risks.
-3. Check test coverage for changed behavior.
-4. Produce findings list ordered by severity.
-5. Summarize open questions and assumptions.
-6. List required fixes before completion.
+Verify test coverage for all changed behavior.
+Flag any changed code that lacks corresponding tests.
 
-## Finding Format
+## Step 3: Produce findings
 
-For each finding:
+List all findings ordered by severity.
+
+For each finding include:
 - Severity (blocker / major / minor)
 - File path and line reference
 - Impact
 - Suggested fix direction
 
-## Output
+## Step 4: Summarize
 
-- Findings list (severity-ordered)
-- Required fixes before completion
+List open questions and assumptions.
+List required fixes before completion.
 
 ## Guarded Fallback
 

@@ -1,28 +1,38 @@
-# /act/tdd — Test-Driven Development Cycle
+---
+description: Implement any feature or bugfix using the RED → GREEN → REFACTOR cycle with explicit evidence.
+---
 
-## When to use
+# /act/tdd — Test-Driven Development
 
-For any feature or bugfix implementation.
-
-## Cycle: RED → GREEN → REFACTOR
-
-1. **RED**: Write one failing test for one behavior. Run it. Confirm failure.
-2. **GREEN**: Write the minimal code to pass that test. Run tests. Confirm pass.
-3. **REFACTOR**: Clean up with tests still passing.
-
-## Rules
-
+**Rules:**
 - One behavior per cycle.
 - No production code before RED is observed.
 - Keep implementations minimal.
 - Re-run relevant tests after each change.
 
-## Evidence Required
+## Step 1: RED — Write a failing test
 
-Record for each cycle:
+Write one failing test for one behavior.
+Run it. Confirm it fails for the right reason.
+
+## Step 2: GREEN — Make it pass
+
+Write the minimal code to pass that test.
+Run tests. Confirm the test passes.
+
+## Step 3: REFACTOR — Clean up
+
+Improve the code without changing behavior.
+Re-run tests after every change to confirm they still pass.
+
+## Step 4: Record evidence
+
+For each cycle record:
 - Command used
 - Failing output (RED)
 - Passing output (GREEN)
+
+Repeat Steps 1–4 for the next behavior.
 
 ## Guarded Fallback
 

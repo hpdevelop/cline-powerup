@@ -8,9 +8,7 @@ description: Scan the entire codebase and generate a prioritized enhancement rep
 $ARGUMENTS
 ```
 
-## Outline
-
-### Step 1: Discover source files
+## Step 1: Discover source files
 
 Find all source files in the repository root. Exclude:
 - `node_modules/`, `.git/`, `dist/`, `build/`, `out/`, `coverage/`

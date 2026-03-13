@@ -2,6 +2,8 @@
 description: Execute the implementation planning workflow using the plan template to generate design artifacts.
 ---
 
+# /speckit/plan — Generate Implementation Plan
+
 ## User Input
 
 ```text
@@ -10,80 +12,73 @@ $ARGUMENTS
 
 You **MUST** consider the user input before proceeding (if not empty).
 
-## Outline
+## Step 1: Setup
 
-1. **Setup**: Run `.specify/scripts/bash/setup-plan.sh --json` from repo root and parse JSON for FEATURE_SPEC, IMPL_PLAN, SPECS_DIR, BRANCH. For single quotes in args like "I'm Groot", use escape syntax: e.g 'I'\''m Groot' (or double-quote if possible: "I'm Groot").
+Run `.specify/scripts/bash/setup-plan.sh --json` from repo root and parse JSON for:
+- `FEATURE_SPEC` — path to the feature spec
+- `IMPL_PLAN` — path to the plan template (already copied)
+- `SPECS_DIR` — root specs directory
+- `BRANCH` — current feature branch
 
-2. **Load context**: Read FEATURE_SPEC and `.specify/memory/constitution.md`. Load IMPL_PLAN template (already copied).
+For single quotes in args, use escape syntax: e.g. `'I'\'m Groot'`.
 
-3. **Execute plan workflow**: Follow the structure in IMPL_PLAN template to:
-   - Fill Technical Context (mark unknowns as "NEEDS CLARIFICATION")
-   - Fill Constitution Check section from constitution
-   - Evaluate gates (ERROR if violations unjustified)
-   - Phase 0: Generate research.md (resolve all NEEDS CLARIFICATION)
-   - Phase 1: Generate data-model.md, contracts/, quickstart.md
-   - Phase 1: Update agent context by running the agent script
-   - Re-evaluate Constitution Check post-design
+## Step 2: Load context
 
-4. **Stop and report**: Command ends after Phase 2 planning. Report branch, IMPL_PLAN path, and generated artifacts.
+Read:
+- `FEATURE_SPEC` — feature requirements and scope
+- `.specify/memory/constitution.md` — project principles and governance
+- `IMPL_PLAN` template — structure to fill in
 
-## Phases
+Fill the Technical Context section. Mark any unknowns as `NEEDS CLARIFICATION`. Fill the Constitution Check section from the constitution. ERROR if any constitution violations are unjustified.
 
-### Phase 0: Outline & Research
+## Step 3: Research unknowns (Phase 0)
 
-1. **Extract unknowns from Technical Context** above:
-   - For each NEEDS CLARIFICATION → research task
-   - For each dependency → best practices task
-   - For each integration → patterns task
+For each `NEEDS CLARIFICATION` in Technical Context, create a research task:
+- `Research <unknown> for <feature context>`
+- `Find best practices for <tech> in <domain>`
+- `Evaluate patterns for <integration>`
 
-2. **Generate and dispatch research agents**:
+Dispatch research and consolidate findings in `FEATURE_DIR/research.md`:
+```
+Decision: [what was chosen]
+Rationale: [why chosen]
+Alternatives considered: [what else evaluated]
+```
 
-   ```text
-   For each unknown in Technical Context:
-     Task: "Research {unknown} for {feature context}"
-   For each technology choice:
-     Task: "Find best practices for {tech} in {domain}"
-   ```
+All `NEEDS CLARIFICATION` markers must be resolved before proceeding. ERROR if any remain.
 
-3. **Consolidate findings** in `research.md` using format:
-   - Decision: [what was chosen]
-   - Rationale: [why chosen]
-   - Alternatives considered: [what else evaluated]
+## Step 4: Design artifacts (Phase 1)
 
-**Output**: research.md with all NEEDS CLARIFICATION resolved
+**Prerequisites**: `research.md` complete.
 
-### Phase 1: Design & Contracts
+Extract entities from the feature spec and write `FEATURE_DIR/data-model.md`:
+- Entity name, fields, relationships
+- Validation rules from requirements
+- State transitions (if applicable)
 
-**Prerequisites:** `research.md` complete
+Define interface contracts in `FEATURE_DIR/contracts/` (if the project exposes external interfaces):
+- Public APIs for libraries, CLI command schemas, web service endpoints, UI contracts
+- Skip if the project is purely internal (build scripts, one-off tools)
 
-1. **Extract entities from feature spec** → `data-model.md`:
-   - Entity name, fields, relationships
-   - Validation rules from requirements
-   - State transitions if applicable
+## Step 5: Update agent context
 
-2. **Define interface contracts** (if project has external interfaces) → `/contracts/`:
-   - Identify what interfaces the project exposes to users or other systems
-   - Document the contract format appropriate for the project type
-   - Examples: public APIs for libraries, command schemas for CLI tools, endpoints for web services, grammars for parsers, UI contracts for applications
-   - Skip if project is purely internal (build scripts, one-off tools, etc.)
+Run `.specify/scripts/bash/update-agent-context.sh codex` to update the AI agent's context file with the new technology choices from this plan. Preserve manual additions between markers.
 
-3. **Agent context update**:
-   - Run `.specify/scripts/bash/update-agent-context.sh codex`
-   - These scripts detect which AI agent is in use
-   - Update the appropriate agent-specific context file
-   - Add only new technology from current plan
-   - Preserve manual additions between markers
+## Step 6: Re-validate against constitution
 
-**Output**: data-model.md, /contracts/*, quickstart.md, agent-specific file
+Re-run the Constitution Check post-design. ERROR if any principle violations introduced during planning are unjustified. Document any justified exceptions with explicit rationale.
 
-## Key rules
+## Step 7: Report completion
 
-- Use absolute paths
-- ERROR on gate failures or unresolved clarifications
+Output:
+- Current branch name
+- Path to `IMPL_PLAN`
+- List of generated artifacts: `research.md`, `data-model.md`, `contracts/`, agent context file
+- Any open TODOs requiring follow-up
 
 ## Next Steps
 
 After completing this workflow, present these options to the user and wait for their choice:
 
-1. **`/speckit.tasks`** — Generate the dependency-ordered task list (recommended)
-2. **`/speckit.checklist`** — Generate a requirements checklist before tasking
+1. **`/speckit/tasks`** — Generate the dependency-ordered task list (recommended)
+2. **`/speckit/checklist`** — Generate a requirements checklist before tasking
