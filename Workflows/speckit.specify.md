@@ -1,13 +1,5 @@
 ---
 description: Create or update the feature specification from a natural language feature description.
-handoffs: 
-  - label: Build Technical Plan
-    agent: speckit.plan
-    prompt: Create a plan for the spec. I am building with...
-  - label: Clarify Spec Requirements
-    agent: speckit.clarify
-    prompt: Clarify specification requirements
-    send: true
 ---
 
 ## User Input
@@ -256,3 +248,10 @@ Success criteria must be:
 - "Database can handle 1000 TPS" (implementation detail, use user-facing metric)
 - "React components render efficiently" (framework-specific)
 - "Redis cache hit rate above 80%" (technology-specific)
+
+## Next Steps
+
+After completing this workflow, present these options to the user and wait for their choice:
+
+1. **`/speckit.clarify`** — Resolve ambiguities in the spec before planning (recommended if [NEEDS CLARIFICATION] markers remain)
+2. **`/speckit.plan`** — Proceed directly to technical planning if the spec is complete

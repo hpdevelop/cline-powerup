@@ -1,14 +1,5 @@
 ---
 description: Generate an actionable, dependency-ordered tasks.md for the feature based on available design artifacts.
-handoffs: 
-  - label: Analyze For Consistency
-    agent: speckit.analyze
-    prompt: Run a project analysis for consistency
-    send: true
-  - label: Implement Project
-    agent: speckit.implement
-    prompt: Start the implementation in phases
-    send: true
 ---
 
 ## User Input
@@ -135,3 +126,10 @@ Every task MUST strictly follow this format:
   - Within each story: Tests (if requested) → Models → Services → Endpoints → Integration
   - Each phase should be a complete, independently testable increment
 - **Final Phase**: Polish & Cross-Cutting Concerns
+
+## Next Steps
+
+After completing this workflow, present these options to the user and wait for their choice:
+
+1. **`/speckit.analyze`** — Run a consistency check across spec, plan, and tasks (recommended)
+2. **`/speckit.implement`** — Start implementation directly if you are confident in task completeness
