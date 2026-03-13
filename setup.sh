@@ -7,9 +7,9 @@
 #   ./setup.sh --global                 # install skills globally only (~/.cline/skills)
 #
 # What gets installed:
-#   Skills/      → ~/.cline/skills/        (global, available in all projects)
-#   Workflows/   → <target>/Workflows/     (project-level workflows)
-#   .clinerules/ → <target>/.clinerules/   (TDD, SOLID, governance — always-active)
+#   Skills/      → ~/.cline/skills/                  (global, available in all projects)
+#   Workflows/   → <target>/.clinerules/workflows/   (project-level workflows)
+#   .clinerules/ → <target>/.clinerules/             (TDD, SOLID, governance — always-active)
 
 set -euo pipefail
 
@@ -145,21 +145,22 @@ fi
 
 [[ "$GLOBAL_ONLY" == true ]] && { echo; ok "Global install complete."; exit 0; }
 
-# ── 2. Workflows → <target>/Workflows/ ───────────────────────────────────────
-h1 "Step 2: Workflows  →  $TARGET/Workflows"
+# ── 2. Workflows → <target>/.clinerules/workflows/ ───────────────────────────
+h1 "Step 2: Workflows  →  $TARGET/.clinerules/workflows"
 
 WORKFLOWS_SRC="$SCRIPT_DIR/Workflows"
+WORKFLOWS_DST="$TARGET/.clinerules/workflows"
 if [[ ! -d "$WORKFLOWS_SRC" ]]; then
   warn "Workflows/ directory not found in source — skipping"
 else
-  do_mkdir "$TARGET/Workflows"
+  do_mkdir "$WORKFLOWS_DST"
 
   # Copy top-level .md files
   for wf in "$WORKFLOWS_SRC"/*.md; do
     [[ -f "$wf" ]] || continue
     name="$(basename "$wf")"
     [[ "$name" == "example-workflow.md" ]] && continue  # reference only
-    do_backup_copy "$wf" "$TARGET/Workflows/$name"
+    do_backup_copy "$wf" "$WORKFLOWS_DST/$name"
     ok "Workflow : $name"
   done
 
@@ -168,13 +169,13 @@ else
     [[ -d "$wf_dir" ]] || continue
     dir_name="$(basename "$wf_dir")"
     count=$(find "$wf_dir" -name "*.md" | wc -l | tr -d ' ')
-    dst_dir="$TARGET/Workflows/$dir_name"
+    dst_dir="$WORKFLOWS_DST/$dir_name"
     if [[ -d "$dst_dir" ]]; then
       do_backup_copy "$wf_dir" "$dst_dir"
-      ok "Updated  : Workflows/$dir_name/  ($count files)"
+      ok "Updated  : .clinerules/workflows/$dir_name/  ($count files)"
     else
       do_copy "$wf_dir" "$dst_dir"
-      ok "Installed: Workflows/$dir_name/  ($count files)"
+      ok "Installed: .clinerules/workflows/$dir_name/  ($count files)"
     fi
   done
 fi
@@ -211,7 +212,7 @@ else
   echo
   echo -e "  ${BOLD}What was installed:${RESET}"
   echo    "    Skills    → $GLOBAL_SKILLS_DIR"
-  echo    "    Workflows → $TARGET/Workflows/"
+  echo    "    Workflows → $TARGET/.clinerules/workflows/"
   echo    "    Rules     → $TARGET/.clinerules/  (TDD, SOLID, governance)"
   echo
   echo -e "  ${BOLD}Next steps:${RESET}"
