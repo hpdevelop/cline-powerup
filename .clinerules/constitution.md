@@ -87,4 +87,4 @@ Rationale: SOLID boundaries keep behavior modular, testable, and safe to extend 
   - Reviewers MUST block merges when MUST-level rules are unmet unless a dated exception is recorded in the feature's tracking.
   - Template alignment MUST be reviewed on every constitution amendment.
 
-**Version**: 1.0.0 | **Ratified**: TODO | **Last Amended**: TODO
+**Version**: 1.0.0 | **Ratified**: 2026-03-13 | **Last Amended**: 2026-03-13
