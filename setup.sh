@@ -7,10 +7,9 @@
 #   ./setup.sh --global                 # install skills globally only (~/.cline/skills)
 #
 # What gets installed:
-#   Skills/    → ~/.cline/skills/              (global, available in all projects)
-#   Workflows/ → <target>/Workflows/           (project-level workflows)
-#   .clinerules/ → <target>/.clinerules/       (project-level always-active rules)
-#   Rules/AGENTS.md → <target>/Rules/AGENTS.md (governance charter)
+#   Skills/      → ~/.cline/skills/        (global, available in all projects)
+#   Workflows/   → <target>/Workflows/     (project-level workflows)
+#   .clinerules/ → <target>/.clinerules/   (TDD, SOLID, governance — always-active)
 
 set -euo pipefail
 
@@ -203,24 +202,6 @@ else
   done
 fi
 
-# ── 4. Rules/AGENTS.md → <target>/Rules/AGENTS.md ────────────────────────────
-h1 "Step 4: Governance  →  $TARGET/Rules"
-
-AGENTS_SRC="$SCRIPT_DIR/Rules/AGENTS.md"
-if [[ ! -f "$AGENTS_SRC" ]]; then
-  warn "Rules/AGENTS.md not found in source — skipping"
-else
-  do_mkdir "$TARGET/Rules"
-  dst="$TARGET/Rules/AGENTS.md"
-  if [[ -f "$dst" ]]; then
-    do_backup_copy "$AGENTS_SRC" "$dst"
-    ok "Updated  : Rules/AGENTS.md"
-  else
-    do_copy "$AGENTS_SRC" "$dst"
-    ok "Installed: Rules/AGENTS.md"
-  fi
-fi
-
 # ── Summary ───────────────────────────────────────────────────────────────────
 h1 "Done"
 if [[ "$DRY_RUN" == true ]]; then
@@ -231,8 +212,7 @@ else
   echo -e "  ${BOLD}What was installed:${RESET}"
   echo    "    Skills    → $GLOBAL_SKILLS_DIR"
   echo    "    Workflows → $TARGET/Workflows/"
-  echo    "    Rules     → $TARGET/.clinerules/"
-  echo    "    Governance→ $TARGET/Rules/AGENTS.md"
+  echo    "    Rules     → $TARGET/.clinerules/  (TDD, SOLID, governance)"
   echo
   echo -e "  ${BOLD}Next steps:${RESET}"
   echo    "    1. Open your project in VS Code with the Cline extension"
