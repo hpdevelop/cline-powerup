@@ -1,29 +1,48 @@
+---
+description: Turn a request into an approved design before any implementation begins.
+---
+
 # /brainstorm — Design Before Implementation
 
-## When to use
+**Hard gate:** Do not write code, modify files, or call any implementation workflow until the user has explicitly approved the design.
 
-Before any implementation. Do not write code until the design is approved.
+## Step 1: Explore context
 
-## Hard Gate
+Read relevant source files, docs, and recent git commits.
+Understand the current structure before asking anything.
 
-Stop. Do not implement. Do not modify files.
-Wait for explicit user approval of the design.
+## Step 2: Ask clarifying questions
 
-## Steps
+Ask one question at a time. Prefer multiple-choice options.
+Focus on: purpose, constraints, and success criteria.
+Stop asking when you have enough to propose approaches.
 
-1. Explore context: read relevant files, docs, recent commits.
-2. Ask one clarifying question at a time (multiple-choice preferred).
-3. Propose 2–3 approaches with trade-offs. Recommend one.
-4. Present design incrementally: architecture → components → data flow → error handling → testing strategy.
-5. Get user approval for each section before proceeding.
-6. Write the approved design to `docs/plans/YYYY-MM-DD-<topic>-design.md`.
-7. Commit the design document.
-8. Run `/write-plan`.
+## Step 3: Propose approaches
 
-## Output
+Present 2–3 approaches with trade-offs.
+Lead with your recommended option and explain why.
+Wait for the user to choose before proceeding.
 
-- Approved design document committed to `docs/plans/`
-- Handoff to `/write-plan`
+## Step 4: Present design
+
+Walk through the design one section at a time:
+- Architecture
+- Components
+- Data flow
+- Error handling
+- Testing strategy
+
+Ask the user if each section looks right before moving to the next.
+Revise any section the user pushes back on.
+
+## Step 5: Write design document
+
+Write the approved design to `docs/plans/YYYY-MM-DD-<topic>-design.md`.
+Commit the document to git.
+
+## Step 6: Hand off to planning
+
+Run `/write-plan`.
 
 ## Guarded Fallback
 
